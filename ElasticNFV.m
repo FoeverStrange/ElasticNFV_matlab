@@ -20,6 +20,10 @@ fm = 1.5;
 fb = 1.5;
 
 % 系统配置
+DEFINE_SERVICETIME = 1;
+DEFINE_NFVDATA = 10 * 10^6;
+DEFINE_COMMUSPEED = 2 * 10^6;
+DEFINE_SERVICETIME_UP = 0.1;
 % 系统目前可用资源
 CPUResource = ones(1, PMNum)*PMvCPUNum;        % 可用CPU资源
 MemoryResource = ones(1, PMNum) * PMmemory;    % 可用存储资源
@@ -108,7 +112,7 @@ for i = 1:timestampsNum
     sorted_TimeStamps_vec(i,4) = NFVNo;   %表明是第几个NFV
 end
 % sorted_TimeStamps_vec：1、时间戳；2、弹性种类；3、第几个业务链；4、第几个NFV
-
+totalPenalty = 0;   %统计总损失
 for stamp = 1:timestampsNum
     time = sorted_TimeStamps_vec(stamp,1);     %适变需求时刻
 %     系统资源释放函数，检查是否有生命周期到头的业务
@@ -194,7 +198,33 @@ for stamp = 1:timestampsNum
                 newCPUNum_vec(NFVNo) = NFVnewCPUNum;
                 serviceChainCell{row, 3} = newCPUNum_vec;
             else
-                disp('CPU 不足')
+%                 CPU不足
+                RefuseNum = NFVdeltaCPUNum - CPUResource(PMNum);
+                RequestNum = NFVnewCPUNum;
+                QRP = QRPComputing(RequestNum, RefuseNum);
+                oldServiceTime = DEFINE_SERVICETIME;
+                NFVData = DEFINE_NFVDATA;
+                CommuSpeed = DEFINE_COMMUSPEED;
+                serviceLifetime = serviceChainCell{row, 6};
+                serviceTimeUp = DEFINE_SERVICETIME_UP;
+                QMP = QMPComputing(oldServiceTime,NFVData,CommuSpeed,serviceLifetime,serviceTimeUp);
+                disp(['CPU 不足，QRP = ',num2str(QRP),'; QMP = ',num2str(QMP)])
+                if(QMP < QRP)
+%                     开始迁移
+                    disp('选择迁移')
+                    
+                else
+%                     忍受QRP
+                    disp('选择忍受')
+%                     CPUResource(PMNum) = 0;
+%                     CPUResource(PMNum) - NFVdeltaCPUNum;
+                    newCPUNum_vec = oldCPUNum_vec;
+                    newCPUNum_vec(NFVNo) = newCPUNum_vec(NFVNo) + CPUResource(PMNum);
+                    serviceChainCell{row, 3} = newCPUNum_vec;
+                    CPUResource(PMNum) = 0;
+                    totalPenalty = totalPenalty + QRP;
+                end
+                
             end
             
         else
