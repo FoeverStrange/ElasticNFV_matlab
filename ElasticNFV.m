@@ -241,7 +241,32 @@ for stamp = 1:timestampsNum
                     newMemNum_vec(NFVNo) = NFVnewMemNum;
                     serviceChainCell{row,4} = newMemNum_vec;
                 else
-                    disp('Mem 不足')
+%                     disp('Mem 不足')
+                    RefuseNum = NFVdeltaMemNum - MemoryResource(PMNum);
+                    RequestNum = NFVnewMemNum;
+                    QRP = QRPComputing(RequestNum, RefuseNum);
+                    oldServiceTime = DEFINE_SERVICETIME;
+                    NFVData = DEFINE_NFVDATA;
+                    CommuSpeed = DEFINE_COMMUSPEED;
+                    serviceLifetime = serviceChainCell{row, 6};
+                    serviceTimeUp = DEFINE_SERVICETIME_UP;
+                    QMP = QMPComputing(oldServiceTime,NFVData,CommuSpeed,serviceLifetime,serviceTimeUp);
+                    disp(['Mem 不足，QRP = ',num2str(QRP),'; QMP = ',num2str(QMP)])
+                    if(QMP < QRP)
+%                       开始迁移
+                        disp('选择迁移')
+                    
+                    else
+%                     忍受QRP
+                        disp('选择忍受')
+%                     CPUResource(PMNum) = 0;
+%                     CPUResource(PMNum) - NFVdeltaCPUNum;
+                        newMemNum_vec = oldMemNum_vec;
+                        newMemNum_vec(NFVNo) = newMemNum_vec(NFVNo) + MemoryResource(PMNum);
+                        serviceChainCell{row, 3} = newMemNum_vec;
+                        MemoryResource(PMNum) = 0;
+                        totalPenalty = totalPenalty + QRP;
+                    end
                 end
                 
             else
@@ -265,7 +290,33 @@ for stamp = 1:timestampsNum
                             newbndNum_vec(NFVNo) = NFVnewbndNum;
                             serviceChainCell{row,5} = newbndNum_vec;
                         else
-                            disp('bnd 不足')
+%                             disp('bnd 不足')
+                            RefuseNum = NFVdeltabndNum - BandwidthResource(PMNum_from,PMNum_to);
+                            RequestNum = NFVnewbndNum;
+                            QRP = QRPComputing(RequestNum, RefuseNum);
+                            oldServiceTime = DEFINE_SERVICETIME;
+                            NFVData = DEFINE_NFVDATA;
+                            CommuSpeed = DEFINE_COMMUSPEED;
+                            serviceLifetime = serviceChainCell{row, 6};
+                            serviceTimeUp = DEFINE_SERVICETIME_UP;
+                            QMP = QMPComputing(oldServiceTime,NFVData,CommuSpeed,serviceLifetime,serviceTimeUp);
+                            disp(['Bnd 不足，QRP = ',num2str(QRP),'; QMP = ',num2str(QMP)])
+                            if(QMP < QRP)
+%                       开始迁移
+                                disp('选择迁移')
+                    
+                            else
+%                     忍受QRP
+                                disp('选择忍受')
+%                     CPUResource(PMNum) = 0;
+%                     CPUResource(PMNum) - NFVdeltaCPUNum;
+                                newbndNum_vec = oldbndNum_vec;
+                                newbndNum_vec(NFVNo) = newbndNum_vec(NFVNo) + BandwidthResource(PMNum_from,PMNum_to);
+                                serviceChainCell{row, 3} = newbndNum_vec;
+                                BandwidthResource(PMNum_from,PMNum_to) = 0;
+                                totalPenalty = totalPenalty + QRP;
+                            end
+                    
                         end
                     else
                         continue
@@ -281,7 +332,7 @@ for stamp = 1:timestampsNum
 
 
 end
-stamp
+disp(['End Main, stampSum = ', num2str(stamp)])
 
 function [CPUResource,MemoryResource,BandwidthResource,serviceChainCell] = sysUpdate(serviceChainCell,timeNow,CPUResource,MemoryResource,BandwidthResource)
 %     统计业务链元组，更新所有PM的资源情况，包括cpu资源、mem资源和bnd资源
