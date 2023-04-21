@@ -199,6 +199,10 @@ for stamp = 1:timestampsNum
                 serviceChainCell{row, 3} = newCPUNum_vec;
             else
 %                 CPU不足
+%               随机选择一个PM作为转移，最多随机10次，如果10次找到的全爆满，则不迁移了
+                [migFlag,migPMNo] = RandChoose(serviceChainCell, CPUResource,MemoryResource,BandwidthResource,row,NFVNo,NFVnewCPUNum,elasticNo);  %row表示需要迁移的chain所在行数
+%               计算QRP QMP
+%                   未来QMP根据卸载决策计算
                 RefuseNum = NFVdeltaCPUNum - CPUResource(PMNum);
                 RequestNum = NFVnewCPUNum;
                 QRP = QRPComputing(RequestNum, RefuseNum);
@@ -212,7 +216,7 @@ for stamp = 1:timestampsNum
                 if(QMP < QRP)
 %                     开始迁移
                     disp('选择迁移')
-                    
+%                     migFlag,migPMNo
                 else
 %                     忍受QRP
                     disp('选择忍受')
@@ -263,7 +267,7 @@ for stamp = 1:timestampsNum
 %                     CPUResource(PMNum) - NFVdeltaCPUNum;
                         newMemNum_vec = oldMemNum_vec;
                         newMemNum_vec(NFVNo) = newMemNum_vec(NFVNo) + MemoryResource(PMNum);
-                        serviceChainCell{row, 3} = newMemNum_vec;
+                        serviceChainCell{row, 4} = newMemNum_vec;
                         MemoryResource(PMNum) = 0;
                         totalPenalty = totalPenalty + QRP;
                     end
@@ -312,7 +316,7 @@ for stamp = 1:timestampsNum
 %                     CPUResource(PMNum) - NFVdeltaCPUNum;
                                 newbndNum_vec = oldbndNum_vec;
                                 newbndNum_vec(NFVNo) = newbndNum_vec(NFVNo) + BandwidthResource(PMNum_from,PMNum_to);
-                                serviceChainCell{row, 3} = newbndNum_vec;
+                                serviceChainCell{row, 5} = newbndNum_vec;
                                 BandwidthResource(PMNum_from,PMNum_to) = 0;
                                 totalPenalty = totalPenalty + QRP;
                             end
@@ -394,8 +398,15 @@ timestamps_vec = cumsum(interarrival_times);
 end
 
 
-function [a, b] = TPMM()
-a = 0;
-b = 0;
+function [migFlag,migPMNo] = RandChoose(serviceChainCell, CPUResource,MemoryResource,BandwidthResource,row,NFVNo,NFVnewXXXNum,elasticNo)  
+%               随机选择一个PM作为转移，最多随机10次，如果10次找到的全爆满，则不迁移了
+%row表示需要迁移的chain所在行数
+migFlag = 0;     %migFlag = 0表示没找到合适PM
+% elasticNo = 1, 3, 5 表示CPU，Mem，Bnd弹性需求
+for i = 1 : 10
+    
+end
 
+
+migPMNo = 0;
 end
