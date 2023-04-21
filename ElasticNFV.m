@@ -283,14 +283,19 @@ function [CPUResource,MemoryResource,BandwidthResource,serviceChainCell] = sysUp
     
 end
 
-function QRP = QRPComputing()
-QRP = 0;
+function QRP = QRPComputing(RequestNum, RefuseNum)
+% 未能满足需求所造成的损失
+QRP = RefuseNum/RequestNum;
 
 end
 
-function QMP = QMPComputing()
-QMP = 0;
-
+function QMP = QMPComputing(oldServiceTime,NFVData,CommuSpeed,serviceLifetime,serviceTimeUp)
+% 迁移损失；包括迁移的数据传输时延和业务时延增加情况
+% QMP = 0;
+DataTransformTime = NFVData / CommuSpeed;
+TransformTimeRatio = DataTransformTime/serviceLifetime;
+serviceTimeUpRatio = serviceTimeUp / oldServiceTime;
+QMP = TransformTimeRatio + serviceTimeUpRatio;
 end
 
 function [timestamps_vec] = NFVElasticRequest_Possion(lambda,T)
