@@ -336,7 +336,7 @@ for stamp = 1:timestampsNum
 
 
 end
-disp(['End Main, stampSum = ', num2str(stamp)])
+disp(['End Main, stampSum = ', num2str(stamp),'totalPenalty = 'num2str(totalPenalty)])
 
 function [CPUResource,MemoryResource,BandwidthResource,serviceChainCell] = sysUpdate(serviceChainCell,timeNow,CPUResource,MemoryResource,BandwidthResource)
 %     查询是否有生命周期结束的业务，释放他们的资源
