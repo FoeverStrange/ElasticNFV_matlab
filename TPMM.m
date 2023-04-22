@@ -1,9 +1,9 @@
             else
-%                 CPUä¸è¶³
-%               éšæœºé€‰æ‹©ä¸€ä¸ªPMä½œä¸ºè½¬ç§»ï¼Œæœ€å¤šéšæœº10æ¬¡ï¼Œå¦‚æœ10æ¬¡æ‰¾åˆ°çš„å…¨çˆ†æ»¡ï¼Œåˆ™ä¸è¿ç§»äº†
-                [migFlag,migPMNo] = RandChoose_Elastic(serviceChainCell, CPUResource,MemoryResource,BandwidthResource,row,NFVNo,NFVnewCPUNum,elasticNo);  %rowè¡¨ç¤ºéœ€è¦è¿ç§»çš„chainæ‰€åœ¨è¡Œæ•°
-%               è®¡ç®—QRP QMP
-%                   æœªæ¥QMPæ ¹æ®å¸è½½å†³ç­–è®¡ç®—
+%                 CPU²»×ã
+%               Ëæ»úÑ¡ÔñÒ»¸öPM×÷Îª×ªÒÆ£¬×î¶àËæ»ú10´Î£¬Èç¹û10´ÎÕÒµ½µÄÈ«±¬Âú£¬Ôò²»Ç¨ÒÆÁË
+                [migFlag,migPMNo] = RandChoose_Elastic(serviceChainCell, CPUResource,MemoryResource,BandwidthResource,row,NFVNo,NFVnewCPUNum,elasticNo);  %row±íÊ¾ĞèÒªÇ¨ÒÆµÄchainËùÔÚĞĞÊı
+%               ¼ÆËãQRP QMP
+%                   Î´À´QMP¸ù¾İĞ¶ÔØ¾ö²ß¼ÆËã
                 RefuseNum = NFVdeltaCPUNum - CPUResource(PMNum);
                 RequestNum = NFVnewCPUNum;
                 QRP = QRPComputing(RequestNum, RefuseNum);
@@ -13,25 +13,25 @@
                 serviceLifetime = serviceChainCell{row, 6};
                 serviceTimeUp = DEFINE_SERVICETIME_UP;
                 QMP = QMPComputing(oldServiceTime,NFVData,CommuSpeed,serviceLifetime,serviceTimeUp);
-                disp(['CPU ä¸è¶³ï¼ŒQRP = ',num2str(QRP),'; QMP = ',num2str(QMP)])
+                disp(['CPU ²»×ã£¬QRP = ',num2str(QRP),'; QMP = ',num2str(QMP)])
                 if(QMP < QRP)
-%                     å¼€å§‹è¿ç§»
+%                     ¿ªÊ¼Ç¨ÒÆ
                     l=0;
                     for l=1:3
-                        for ï¼Ÿ% Lå±‚æ¯ä¸€ä¸ªæ”¾ç½®æœ‰rä¸­VNFçš„èŠ‚ç‚¹v
+                        for £¿% L²ãÃ¿Ò»¸ö·ÅÖÃÓĞrÖĞVNFµÄ½Úµãv
                             if l=0
-                               ï¼Ÿ            %rä¸­åœ¨vä¸­çš„VNFæ”¾å…¥ç¬¬ä¸€é›†åˆWv 
-                               Sv=0         %Svç½®é›¶
-                               (Wv,Sv)=SettleInServer       %è°ƒç”¨SettleInServerå‡½æ•°
+                               £¿            %rÖĞÔÚvÖĞµÄVNF·ÅÈëµÚÒ»¼¯ºÏWv 
+                               Sv=0         %SvÖÃÁã
+                               (Wv,Sv)=SettleInServer       %µ÷ÓÃSettleInServerº¯Êı
                             else
-                               (Wv,Sv)=SettleInSwitch       %è°ƒç”¨SettleInSwitchå‡½æ•°
+                               (Wv,Sv)=SettleInSwitch       %µ÷ÓÃSettleInSwitchº¯Êı
                             if size(Sv)==number(VNFs of r)
                                 return true
                             else if l==3
-                                    ï¼Ÿ   %å›æ»šåˆ°æ‰§è¡Œå‰çš„çŠ¶æ€
+                                    £¿   %»Ø¹öµ½Ö´ĞĞÇ°µÄ×´Ì¬
                                     return false
-                            else %ä¸Šä¼ ç­‰å¾…é›†å’Œå·²ç»“ç®—é›†
-                                v'=vçš„çˆ¶èŠ‚ç‚¹
+                            else %ÉÏ´«µÈ´ı¼¯ºÍÒÑ½áËã¼¯
+                                v'=vµÄ¸¸½Úµã
                                 Wv'+= Wv
                                 Sv'+=Sv
                             l=l+1
@@ -50,11 +50,11 @@
 
 
 
-                    disp('é€‰æ‹©è¿ç§»')
+                    disp('Ñ¡ÔñÇ¨ÒÆ')
 %                     migFlag,migPMNo
                 else
-%                     å¿å—QRP
-                    disp('é€‰æ‹©å¿å—')
+%                     ÈÌÊÜQRP
+                    disp('Ñ¡ÔñÈÌÊÜ')
 %                     CPUResource(PMNum) = 0;
 %                     CPUResource(PMNum) - NFVdeltaCPUNum;
                     newCPUNum_vec = oldCPUNum_vec;

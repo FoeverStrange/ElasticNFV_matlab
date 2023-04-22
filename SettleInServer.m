@@ -1,10 +1,10 @@
 function [Wv,Sv] = SettleInServer(v,Wv,Sv)
-(Wv,Sv)=knapsack(v,Wv,Sv); %èƒŒåŒ…é—®é¢˜ï¼ŒCPUæ˜¯volumeï¼Œå†…å­˜æ˜¯memory
+(Wv,Sv)=knapsack(v,Wv,Sv); %±³°üÎÊÌâ£¬CPUÊÇvolume£¬ÄÚ´æÊÇmemory
 
-b=GetUpstreamBandwidth(Sv); %è·å–Svçš„ä¸Šè¡Œå¸¦å®½
+b=GetUpstreamBandwidth(Sv); %»ñÈ¡SvµÄÉÏĞĞ´ø¿í
 
-while bè¶…å‡ºå½“å‰é™åˆ¶ and size(Sv)>0 do
-    ?;%éå†é€‰å– b0[VM] - bi[VM]æœ€å¤§çš„VM
+while b³¬³öµ±Ç°ÏŞÖÆ and size(Sv)>0 do
+    ?;%±éÀúÑ¡È¡ b0[VM] - bi[VM]×î´óµÄVM
     Sv -= VM;
     Wv += VM;
     b = GetUpstreamBandwidth(Sv );
