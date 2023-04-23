@@ -301,7 +301,7 @@ for stamp = 1:timestampsNum
                            continue 
                         end
                         %如果是最后一个NFV/如果两个NFV在同一个PM，则不扩张
-                        oldbndNum_vec = serviceChainCell{row, 5};
+                        oldbndNum_vec = serviceChainCell{row, 6};
                         NFVoldbndNum = oldbndNum_vec(NFVNo);
                         NFVnewbndNum = ceil(NFVoldbndNum * fb);
                         NFVdeltabndNum = NFVnewbndNum - NFVoldbndNum;
@@ -340,12 +340,14 @@ for stamp = 1:timestampsNum
                                     nextHopbndNum = oldbndNum_vec(NFVNo + 1);
                                     PMNo_to2 = PM_vec(NFVNo+2);
                                     BandwidthResource(PMNo_to,PMNo_to2) = BandwidthResource(PMNo_to,PMNo_to2) + nextHopbndNum;
-                                    BandwidthResource(migPMNo,PMNo_to2) = BandwidthResource(migPMNo,PMNo_to2) - nextHopbndNum;
+                                    BandwidthResource(PMNo_to,PMNo_to2) = BandwidthResource(PMNo_to,PMNo_to2) + nextHopbndNum;
+                                    
                                 end
-                                newbndNum_vec = oldbndNum_vec;
-                                newbndNum_vec(NFVNo) = NFVnewbndNum;
-                                serviceChainCell{row, 5} = newbndNum_vec;
-                                totalPenalty = totalPenalty + QMP;
+                                
+                        newbndNum_vec = oldbndNum_vec;
+                        newbndNum_vec(NFVNo) = NFVnewMemNum;
+                        serviceChainCell{row, 4} = newMemNum_vec;
+                        totalPenalty = totalPenalty + QMP;
                             else
 %                     忍受QRP
                                 disp('选择忍受')
