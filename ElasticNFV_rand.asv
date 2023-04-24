@@ -459,12 +459,10 @@ function commuCapacity = commuCapacity(distance)
     %信道使用C波段6GHz频率
     f = 6000;
     Pu = 10;       %发射功率10W
-    sigma2 = 1e-13; %噪声
-    bw_MHz = 1 * 10^6; %带宽
+    sigma2
     gain_DB = 20 * log10(f) + 20 * log10(distance) + 32.4;    %DB级别
     H = 1/(10^(gain_DB/10));                                  %衰落情况
-    snr = Pu * H / sigma2;
-%     香农信道公式
-    commuCapacity = bw_MHz * log2(1 + snr);
+    
+    
 end
 
