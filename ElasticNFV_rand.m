@@ -1,5 +1,17 @@
 clear;
 close all
+% 随机拓扑，连接度4~5，每个节点随机和4~5个节点连接
+% 每一跳时延20~30ms
+% 带宽设一个
+% 搜索按照两条三条之内的
+% 没有switch
+% 没有tree，只通过拓扑实现
+% 遍历2~3跳范围内
+
+% 弹性需求是VNF1出现的，但是可能把VNF3扔出去，修改对应接口，传输对应的SFC
+
+% 把出现冲突的SFC提取出来，以及给对应的资源
+
 coreSwitchNum = 1;
 aggregationSwitchNum = 2;
 ToRSwitchNum = 4;
