@@ -1,14 +1,27 @@
-function [Wv,Sv] = knapsack(v, Wv, Sv)  %重量、价值、容量
-n = length(v);
-dp = zeros(n+1, Sv+1);
-for i = 1:n
-    for j = 1:Sv
-        if v(i) <= j
-            dp(i+1,j) = max(dp(i,j-v(i))+Wv(i), dp(i,j));
-        else
-            dp(i+1,j) = dp(i,j);
+function [max_value, chosen_items] = knapsack_dp(weights, values, W)
+    N = numel(weights);
+    dp = zeros(N+1, W+1);
+    
+    for i = 1:N
+        for w = 0:W
+            if weights(i) <= w
+                dp(i+1, w+1) = max(dp(i, w+1-weights(i)) + values(i), dp(i, w+1));
+            else
+                dp(i+1, w+1) = dp(i, w+1);
+            end
         end
     end
-end
-[Wv,Sv] = dp(n+1,Sv+1);
+    
+    max_value = dp(N+1, W+1);
+    chosen_items = [];
+    i = N;
+    w = W;
+    while i > 0
+        if dp(i+1, w+1) ~= dp(i, w+1)
+            chosen_items = [chosen_items, i];
+            w = w - weights(i);
+        end
+        i = i - 1;
+    end
+    chosen_items = fliplr(chosen_items);
 end
