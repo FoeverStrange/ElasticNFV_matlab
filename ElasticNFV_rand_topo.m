@@ -21,7 +21,7 @@ DEFINE_SERVICETIME_UP = 0.1;
 coreSwitchNum = 1;
 aggregationSwitchNum = 2;
 ToRSwitchNum = 4;
-PMNum = 16;
+[PMNum, ~] = size(NODE_TOPOLOGY);
 
 % PM配置
 PMvCPUNum = 12;
@@ -54,7 +54,6 @@ for i = 1:serviceChainNum
     
    
     NFV_PMs_vec = randi([1 PMNum]) * ones(1,NFVNum);   
-    
     
     CPU_Num = randi([NFVNum ceil(0.5 * PMvCPUNum)]);    %需要CPU总数
     r = randperm(CPU_Num-1, NFVNum-1);
