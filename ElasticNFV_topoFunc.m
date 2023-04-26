@@ -215,8 +215,20 @@ for stamp = 1:timestampsNum
             else
 %                 CPU不足
 %               随机选择一个PM作为转移，最多随机10次，如果10次找到的全爆满，则不迁移了
-                [migFlag,new_ServiceChain_vec] = RandChoose_Elastic_topo(new_ServiceChain_vec, CPUResource,MemoryResource,BandwidthResource,row,NFVNo,NFVnewCPUNum,elasticNo,PMNum,NODE_TOPOLOGY);  %row表示需要迁移的chain所在行数
-%               计算QRP QMP
+                [migFlag,new_ServiceChain_vec] = RandChoose_Elastic_topo(old_ServiceChain_vec, CPUResource,MemoryResource,BandwidthResource,NFVNo,NFVnewCPUNum,elasticNo,PMNum,NODE_TOPOLOGY);  %row表示需要迁移的chain所在行数
+                %输入：
+                %old_ServiceChain_vec：旧SFC；
+                %CPUResource、MemoryResource、BandwidthResource：各PM节点还有哪些资源
+                %NFVNo：出现弹性需求的NFV编号
+                %NFVnewCPUNum：弹性之后该NFV对CPU数目的要求
+                %elasticNo：弹性种类（1~6）CPU多/少；Mem多/少……
+                %PMNum PM总数
+                %NODE_TOPOLOGY：节点之间的拓扑关系
+                %输出：
+                %migFlag：是否找到了有效迁移PM，是为1，没找到设为0
+                %new_ServiceChain_vec：迁移之后对应的SFC
+                
+                %               计算QRP QMP
 %                   未来QMP根据卸载决策计算
                 RefuseNum = NFVdeltaCPUNum - CPUResource(PMNo);
                 RequestNum = NFVnewCPUNum;
